@@ -24,12 +24,12 @@ object AkkaHttpScalaDockerSeed extends App {
   val messageToSend = conf.getString("custom.messages.body")
 
   // actors
-  val queueConnector = system.actorOf(QueueConnector.props(queueName), "queue-connector")
-  val stockPriceConnector = system.actorOf(StockPriceConnector.props(apiKey), "stock-price-connector")
-  val stockPriceWorker = system.actorOf(MessageWorker.props(queueConnector, messageToSend), "message-worker")
+  //val queueConnector = system.actorOf(QueueConnector.props(queueName), "queue-connector")
+  //val stockPriceConnector = system.actorOf(StockPriceConnector.props(apiKey), "stock-price-connector")
+  //val stockPriceWorker = system.actorOf(MessageWorker.props(queueConnector, messageToSend), "message-worker")
 
   // route definitions
-  val queueRoutes = new QueueRoutes(queueConnector, stockPriceConnector)
+  //val queueRoutes = new QueueRoutes(queueConnector, stockPriceConnector)
   val monitoringRoutes = new MonitoringRoutes()
 
   // implicit exception handler - this will be picked up by the route definitions
@@ -37,7 +37,7 @@ object AkkaHttpScalaDockerSeed extends App {
 
   // merge all routes here
   def allRoutes = {
-    queueRoutes.routes ~
+    //queueRoutes.routes ~
     monitoringRoutes.routes
   }
 

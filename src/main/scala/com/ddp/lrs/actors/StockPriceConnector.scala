@@ -9,6 +9,7 @@ import akka.pattern.pipe
 import akka.stream.{ActorMaterializer, ActorMaterializerSettings}
 import com.ddp.lrs.models.errors.ExternalResourceException
 import com.ddp.lrs.models.DailyQuoteResult
+import com.ddp.lrs.models.marshalling.CustomMarshallers._
 
 import scala.concurrent.Future
 
@@ -71,6 +72,11 @@ class StockPriceConnector(apiKey: String) extends Actor with ActorLogging {
     val output: Future[Option[DailyQuoteResult]] = response.flatMap {
       case resp =>
         resp.status match {
+          case StatusCodes.OK => {
+            val dailyQuote = Unmarshal(resp.entity).to[DailyQuoteResult]
+            val someQuote = dailyQuote.map { quote => Some(quote) }
+            someQuote
+          }
           // format result
           case StatusCodes.NotFound =>
             Future.successful(None)
